@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pedidos</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+
+
+    <script type="text/javascript">
+        (function () {
+            emailjs.init({
+                publicKey: "Ehblb4cY9PoG6TzWs",
+            });
+        })();
+    </script>
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        .form-check {
+            padding-top: 6px;
+        }
+    </style>
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <style>
+        :root {
+            --navbar-height: 130px;
+
+        }
+
+        body {
+            overflow-x: hidden;
+            color: whitesmoke;
+            background-image: url('emailbackgroundblur.png');
+            /* Replace with your image path */
+            background-repeat: no-repeat;
+            /* Prevents the image from repeating */
+            background-size: cover;
+            /* Scales the image to cover the entire element */
+            background-position: center;
+            /* Centers the image */
+            background-attachment: fixed;
+            /* Keeps the background fixed when scrolling */
+
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            height: var(--navbar-height);
+            background: whitesmoke;
+            box-shadow: 0 30px 10px rgba(0, 0, 0, 0.1);
+            /* position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            z-index: 1000;
+            padding: 0 20px; */
+
+        }
+
+
+        .sidebar-menu a {
+            align-items: center;
+            padding: 12px 20px;
+            color: #34495e;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 25px;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: grey;
+            border-width: 2px;
+            border-style: solid;
+            border-color: #34495e;
+            border-radius: 25px;
+            padding-left: 16px;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 0;
+            padding: 30px;
+            color: white;
+            min-height: calc(100vh - var(--navbar-height));
+            display: flex;
+            color: white;
+            justify-content: center;
+            /* Centra horizontalmente */
+            align-items: center;
+
+
+
+        }
+
+
+
+        /* Cards */
+        .stat-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 24px;
+        }
+
+        .border-bottom {
+            border-bottom: 2px solid #34495e;
+
+            height: var(--navbar-height);
+            background: whitesmoke;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: auto;
+            z-index: 1000;
+            padding: 0 20px;
+
+
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: calc(var(--sidebar-width) * -1);
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .navbar-custom {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-top: 0;
+            }
+
+
+        }
+    </style>
+
+
+</head>
+
+
+
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom navbar-dark">
+        <div class="d-flex align-items-center w-100 justify-content-between">
+            <button class="btn btn-link text-white d-md-none" id="sidebarToggle">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+
+            <h5 class="mb-0 text-white d-none d-md-block">
+                <a href="..\homepage_client.php"> <img src="transparentlogo.png" style="width: 180px;"></i></a>
+            </h5>
+
+
+            <div class="sidebar-menu">
+
+                <a href="email.php">
+                    <i class="bi bi-basket"></i>
+                    <span>Realizar un pedido</span>
+                </a>
+                <a href="..\homepage_client.php">
+                    <i class="bi bi-house-door"></i>
+                    <span>Pagina principal</span>
+                </a>
+                <a href="login.php">
+                    <i class="bi bi-people"></i>
+                    <span>Login de empleado</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
+    </div>
+
+    <div class="main-content">
+        <div class="col-8 mx-auto">
+            <form id="contact-form" class="mt-4" method="POST">
+                <h2 style="color:white;">Ingrese los productos que desea comprar:</h2>
+                <div class="card">
+                    <div class="card-body">
+
+                        <p class="d-inline-flex gap-1">
+
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                Escoger productos
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                <div class="table-responsive">
+                                    <table id="inventoryTable" class="table table-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Datos cargados via AJAX -->
+                                        </tbody>
+                                    </table>
+                                    <label>
+                                        <b>Monto</b>
+                                    </label>
+                                    <input type="number" id="montototal" name="montototal" class="form-control"
+                                        required="" value="0" readonly>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h2>Ingrese sus datos personales:</h2>
+
+                        <div class="col">
+                            <div class="row">
+
+                                <div class="col-4 mx-auto">
+                                    <div class="row mb-3">
+                                        <label>Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" required="">
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label>Apellido</label>
+                                        <input type="text" name="apellido" class="form-control" required="">
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label>Telefono</label>
+                                        <input type="number" name="telefono" class="form-control" required="" min="">
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label>Fecha</label>
+                                        <input type="text" name="fecha" id="fecha" class="form-control" required=""
+                                            readonly>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <input type="text" name="fechatecnica" id="fechatecnica" class="form-control"
+                                            required="" readonly hidden>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 mx-auto">
+                                    <div class="row mb-3">
+                                        <label>Zonas</label>
+                                        <select class="form-control form-select" name="zonas" aria-label="Zonas"
+                                            id="zonas">
+                                        </select>
+
+                                        <input type="text" name="zonanombre" id="zonanombre" class="form-control"
+                                            required="" readonly hidden>
+
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label>Ubicacion exacta</label>
+                                        <textarea name="ubicacion" class="form-control" value="" required></textarea>
+
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label>Correo</label>
+                                        <input type="email" name="email" class="form-control" required="">
+                                    </div>
+
+                                    <input type="text" name="pedidofull" id="pedidofull" class="form-control"
+                                        required="" readonly hidden>
+
+                                    <input type="text" name="cantidadjson" id="cantidadjson" class="form-control"
+                                        required="" readonly hidden>
+
+                                    <div class="row mb-3">
+                                        <label>Detalles</label>
+                                        <textarea name="detalles" class="form-control" value=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Row: Submit Button -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="submit" id="Send" value="Send" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+
+
+    <!-- calculo de fechas -->
+    <script>
+        const fecha = document.getElementById("fecha");
+
+        const fechaCompleta = new Date().toLocaleDateString('es-ES', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const fechaCapitalizada = fechaCompleta.charAt(0).toUpperCase() + fechaCompleta.slice(1);
+
+        fecha.value = fechaCapitalizada;
+
+        const fechatecnica = document.getElementById("fechatecnica");
+
+        const fechaactual = new Date();
+
+        const año = fechaactual.getFullYear();
+        const mes = String(fechaactual.getMonth() + 1).padStart(2, '0');
+        const dia = String(fechaactual.getDate()).padStart(2, '0');
+
+        const dateTime = `${año}-${mes}-${dia}`;
+
+        fechatecnica.value = dateTime;
+    </script>
+
+    <!-- calculo de precio-->
+
+    <script>
+        function fila(cantidad, nombre, montos) {
+            return `<tr style="height: 22px;">
+                <th style="text-align: center;">${cantidad}</th>
+                <th>${nombre}</th>
+                <th>L${montos}</th>
+            </tr>`;
+        }
+
+        //Retorna un json para el calculo de cantidad
+        function filaCantidad(idinventario, cantidad) {
+            return obj = {
+                "idinventario": idinventario,
+                "cantidad": cantidad,
+            };
+        }
+    </script>
+
+
+    <!--  CODIGO AJAX -->
+
+    <script>
+        let table;
+
+
+        // Inicializar DataTable
+        $(document).ready(function () {
+            table = $('#inventoryTable').DataTable({
+                ajax: {
+                    url: 'api_email.php?action=list_inventario',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'nombre_producto' },
+                    {
+                        data: null,
+                        render: function (data) {
+                            return `<input type="number" min="0" class="form-control cantidad-input" placeholder="Cantidad" id="cantidad_${data.idinventario}" value="">`;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function (data) {
+                            return `<input type="number" class="form-control cantidad-input" placeholder="Precio" id="precio_${data.idinventario}" value="" readonly>`;
+                        }
+                    }
+                ],
+                language: {
+                    url: ''
+                },
+                paging: false,
+                searching: false,
+                info: false,
+                ordering: false,
+                lengthChange: false,
+                order: [[0, 'desc']]
+            });
+
+
+            //event listener en cada input
+
+            $('#inventoryTable').on('draw.dt', function () {
+                const inputs = document.querySelectorAll('#inventoryTable input');
+                const table = document.getElementById("inventoryTable");
+
+                inputs.forEach(function (input) {
+
+                    //Esta funcion calcula el precio de cada producto
+                    //Ademas, determina pedidofull y montototal
+                    //Ademas, cambia inventario
+                    input.addEventListener('input', async function (event) {
+                        try {
+                            const response = await fetch(`api_email.php?action=get_inventario&idinventario=${input.id.split('_')[1]}`);
+                            const result = await response.json();
+
+                            montototal = document.getElementById('montototal');
+                            pedidofull = document.getElementById('pedidofull');
+                            cantidadjson = document.getElementById('cantidadjson');
+
+                            pedidofullvalor = '';
+                            cantidadjsonvalor = [];
+                            montototalvalor = parseInt(montototal.value);
+
+                            if (result.success) {
+                                const inventario = result.data;
+                                monto = document.getElementById(`precio_${input.id.split('_')[1]}`);
+                                input = document.getElementById(`cantidad_${input.id.split('_')[1]}`);
+                                precio = inventario.precio;
+
+                                monto.value = input.value * precio;
+
+                                // Calculo del monto total y de pedidofull
+                                montototalvalor = 0;
+
+                                for (let i = 0; i < table.rows.length; i++) {
+
+                                    //select the input in the second column
+                                    const secondCell = table.rows[i].cells[1];
+                                    const secondCellId = i;
+
+                                    const thirdCell = table.rows[i].cells[2];
+
+                                    const inputElement = thirdCell.querySelector('input');
+                                    if (inputElement) {
+                                        const inputValue = parseFloat(inputElement.value) || 0;
+                                        if (inputValue != 0) {
+                                            montototalvalor += inputValue;
+                                            pedidofullvalor += fila(
+                                                table.rows[i].cells[1].querySelector('input').value,
+                                                table.rows[i].cells[0].innerText,
+                                                inputValue
+                                            );
+
+                                            cantidadjsonvalor.push(JSON.stringify(filaCantidad(
+                                                table.rows[i].cells[1].querySelector('input').id.split('_')[1],
+                                                table.rows[i].cells[1].querySelector('input').value
+                                            )));
+
+                                        }
+                                    }
+                                }
+                                montototal.value = montototalvalor;
+                                pedidofull.value = pedidofullvalor;
+                                cantidadjson.value = cantidadjsonvalor;
+
+                                console.log(cantidadjson.value);
+                            }
+                        } catch (error) {
+                            Swal.fire('Error', 'No se entregar', 'error');
+                            console.error("Error details:", error);  // Shows the full error stack
+                        }
+                    });
+
+                });
+
+
+            });
+
+        });
+
+
+
+        // Guardar pedido a pedidos
+        document.getElementById('contact-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            console.log(data);
+
+            if (data.montototal === "0") {
+                Swal.fire('Error', 'Por favor, seleccione al menos un producto', 'error');
+
+                return;
+            }
+
+
+            const jsonData = JSON.parse("[" + data.cantidadjson + "]");
+            console.log(jsonData);
+
+
+            const dataformateado = {
+                fecha_inicio: data.fechatecnica,
+                fecha_completacion: data.fechatecnica,
+                nombre: data.nombre,
+                apellido: data.apellido,
+                telefono: data.telefono,
+                correo: data.email,
+                idzonas: data.zonas,
+                ubicacion_descripcion: data.ubicacion,
+                completacion: 0,
+                monto_total: data.montototal,
+                detalles_extra: data.detalles
+            };
+
+            console.log(dataformateado);
+
+            try {
+
+                const response = await fetch(`api_pedidos_email.php?action=create_pedido`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(dataformateado),
+                });
+
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+
+                let result;
+                try {
+                    result = await response.json();
+                } catch (jsonError) {
+                    console.error("JSON parse error:", jsonError);
+                    Swal.fire('Error', 'Respuesta inválida del servidor. Por favor, intente de nuevo.', 'error');
+                    return;
+                }
+
+                if (result.success) {
+                    Swal.fire('Éxito', 'Pedido creado correctamente. Se enviará un correo de confirmación.', 'success').then(() => {
+                    });
+                } else {
+                    Swal.fire('Error', result.message || 'No se pudo guardar el pedido', 'error');
+                    throw new Error();
+                }
+
+                for (let i = 0; i < jsonData.length; i++) {
+                    console.log(jsonData[i]);
+                    const response2 = await fetch(`api_email.php?action=cantidad_resta`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(jsonData[i]),
+                    })
+
+                    if (!response2.ok) {
+                        throw new Error(`HTTP error! status: ${response2.status}`);
+                    }
+
+                    const result2 = await response2.json();
+                    if (result2.success) {
+                        console.log('Inventario actualizado correctamente para idinventario ' + jsonData[i].idinventario);
+                    } else {
+                        console.log('Error al actualizar inventario para idinventario ' + jsonData[i].idinventario + ': ' + result2.message);
+                        nombre = document.getElementById(`cantidad_${jsonData[i].idinventario}`).parentElement.parentElement.cells[0].innerText;
+                        let errorcantidad = 'Elija otra cantidad para el producto ' + nombre;
+                        Swal.fire('Error', errorcantidad, 'error');
+                        throw new Error();
+                    }
+
+
+                }
+
+                //envio de correo despues de validaciones
+                emailjs.sendForm('contact_service', 'template_5e6p66t', this)
+                    .then(() => {
+                        console.log('SUCCESS!');
+                    }, (error) => {
+                        console.log('FAILED...', error);
+                    });
+
+                document.getElementById('contact-form').reset();
+
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                Swal.fire('Error', 'Error de conexión: ' + error.message, 'error');
+            }
+
+
+
+        });
+
+    </script>
+
+    <script>
+        const selectBox = document.getElementById('zonas');
+
+        async function cargarZonas() {
+            try {
+                const response = await fetch(`api_zona_email.php?action=list_zonas`);
+                const result = await response.json();
+
+                if (result.success) {
+                    for (let i = 0; i < result.data.length; i++) {
+                        let zona = result.data[i];
+
+                        const option = document.createElement('option');
+                        option.value = zona.idzonas;
+                        option.textContent = zona.zona;
+
+                        selectBox.appendChild(option);
+                    }
+
+                } else {
+                    console.error('Error:', result.message);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        cargarZonas();
+
+        //Actualizar el nombre de la zona seleccionada en zonanombre
+        selectBox.addEventListener('change', function () {
+            const seleccionado = this.options[this.selectedIndex];
+            const zonanombre = document.getElementById('zonanombre');
+            zonanombre.value = seleccionado.text;
+        });
+
+
+    </script>
+
+
+    <div id="debug" style="display: none;"></div>
+    <!-- para que funcione el toggle del button -->
+
+
+</body>
+
+
+</html>
